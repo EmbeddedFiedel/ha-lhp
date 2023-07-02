@@ -1,9 +1,11 @@
-"""Constants for integration_blueprint."""
+"""Constants for the LHP integration."""
 from logging import Logger, getLogger
+from datetime import timedelta
+
 
 LOGGER: Logger = getLogger(__package__)
 
-NAME = "Integration blueprint"
-DOMAIN = "integration_blueprint"
-VERSION = "0.0.0"
-ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
+NAME = "Hochwasserportal"
+DOMAIN = "lhp"
+VERSION = "0.0.1"
+SCAN_INTERVAL = timedelta(minutes=30)

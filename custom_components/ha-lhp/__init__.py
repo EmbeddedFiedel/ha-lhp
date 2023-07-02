@@ -5,14 +5,20 @@ https://github.com/ludeeus/integration_blueprint
 """
 from __future__ import annotations
 
-from lhp import LHPClient
+from lhp import (
+    LHPClient,
+    CurrentWaterLevel,
+    LHPError,
+)
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import Platform
+from homeassistant.const import Platform, CONF_ID
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import DOMAIN
+
+from .const import DOMAIN, LOGGER, SCAN_INTERVAL
 
 PLATFORMS = [Platform.SENSOR]
 
@@ -23,35 +29,32 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     lhp_client = LHPClient(session=session)
 
     async def async_update_currentwaterlevel() -> CurrentWaterLevel:
+        try:
+            return await lhp_client.currentwaterlevel(
+                pgnr=entry.data[CONF_ID],
+            )
+        except LHPError as err:
+            raise UpdateFailed("LHP API communication error") from err
 
-
-    """Set up this integration using UI."""
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = coordinator = BlueprintDataUpdateCoordinator(
-        hass=hass,
-        client=IntegrationBlueprintApiClient(
-            username=entry.data[CONF_USERNAME],
-            password=entry.data[CONF_PASSWORD],
-            session=async_get_clientsession(hass),
-        ),
+    coordinator: DataUpdateCoordinator[CurrentWaterLevel] = DataUpdateCoordinator(
+        hass,
+        LOGGER,
+        name=f"{DOMAIN}_{entry.data[CONF_ID]}",
+        update_interval=SCAN_INTERVAL,
+        update_method=async_update_currentwaterlevel,
     )
     # https://developers.home-assistant.io/docs/integration_fetching_data#coordinated-single-api-poll-for-data-for-all-entities
     await coordinator.async_config_entry_first_refresh()
 
+    hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Handle removal of an entry."""
-    if unloaded := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hass.data[DOMAIN].pop(entry.entry_id)
-    return unloaded
-
-
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    """Unload Open-Meteo config entry."""
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unload_ok:
+        del hass.data[DOMAIN][entry.entry_id]
+    return unload_ok
