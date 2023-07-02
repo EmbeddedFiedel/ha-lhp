@@ -10,13 +10,13 @@
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
-_Integration to integrate with [integration_blueprint][integration_blueprint]._
+_Integration to integrate with [hochwasserportal][hochwasserportal]._
 
 **This integration will set up the following platforms.**
 
-| Platform        | Description                         |
-| --------------- | ----------------------------------- |
-| `sensor`        | Show info from blueprint API.       |
+| Platform | Description                          |
+| -------- | ------------------------------------ |
+| `sensor` | Show info from hochwasserportal API. |
 
 ## Installation
 
@@ -38,7 +38,7 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 
 ---
 
-[integration_blueprint]: https://github.com/embeddedfiedel/ha-lhp
+[hochwasserportal]: https://www.hochwasserzentralen.de/
 [commits-shield]: https://img.shields.io/github/commit-activity/y/embeddedfiedel/ha-lhp.svg?style=for-the-badge
 [commits]: https://github.com/embeddedfiedel/ha-lhp/commits/main
 [hacs]: https://github.com/hacs/integration
