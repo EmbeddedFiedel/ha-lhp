@@ -14,11 +14,17 @@ _Integration to integrate with [hochwasserportal][hochwasserportal]._
 
 **This integration will set up the following platforms.**
 
-| Platform | Description                          |
-| -------- | ------------------------------------ |
-| `sensor` | Show info from hochwasserportal API. |
+| Platform | Description                                 |
+| -------- | ------------------------------------------- |
+| `sensor` | Read water level from hochwasserportal API. |
 
 ## Installation
+
+### HACS
+
+The integration is available in HACS.
+
+### Manual Installation
 
 1. Using the tool of choice open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
 1. If you do not have a `custom_components` directory (folder) there, you need to create it.
