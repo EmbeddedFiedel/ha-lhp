@@ -38,6 +38,10 @@ The integration is available in HACS.
 
 <!---->
 
+## This integration is based on the integration_blueprint
+
+https://github.com/ludeeus/integration_blueprint
+
 ## Contributions are welcome!
 
 If you want to contribute to this please read the [Contribution guidelines](CONTRIBUTING.md)
