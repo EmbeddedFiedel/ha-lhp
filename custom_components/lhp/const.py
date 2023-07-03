@@ -7,5 +7,5 @@ LOGGER: Logger = getLogger(__package__)
 
 NAME = "Hochwasserportal"
 DOMAIN = "lhp"
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 SCAN_INTERVAL = timedelta(minutes=30)
